@@ -1,0 +1,82 @@
+:root {
+    --primary-color: #b8174c;
+    --secondary-color: #19a187;
+
+    --neutral-100: #f0f0f0;
+    --neutral-50: #888;
+    --neutral-0: #000;
+
+    --error-color: var(--primary-color);
+
+    --default-border: solid thin var(--secondary-color);
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--neutral-100);
+    height: 50px;
+    padding-left: 20px;
+    line-height: 50px;
+    font-size: large;
+}
+
+.navbar {
+    background-color: var(--secondary-color);
+    color: var(--neutral-100);
+    height: 25px;
+    line-height: 25px;
+    padding-left: 20px;
+}
+
+.navbar a,
+.navbar a:active,
+.navbar a:focus,
+.navbar a:visited,
+.navbar a:hover {
+    color: var(--neutral-100);
+}
+
+
+main {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+table.paper {
+    width: 100%;
+    margin: 0;
+}
+
+table.paper .titulo-tabla {
+    border-bottom: var(--default-border);
+}
+
+.pie-pagina {
+    padding: 20px;
+    border-top: solid thin var(--primary-color);
+}
+
+.numero {
+    text-align: right;
+}
+
+.lista-vacia {
+    text-align: center;
+    color: var(--neutral-50);
+    padding: 20px;
+}
+
+.error {
+    color: var(--error-color);
+}
+
+p.error {
+    font-size: small;
+    margin: 0;
+    line-height: 0;
+}
+
+tr.error+tr td {
+    padding-bottom: 13px;
+}

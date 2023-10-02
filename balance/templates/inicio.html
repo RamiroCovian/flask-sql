@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block head_title%}
+{{ super() }}: Inicio
+{% endblock head_title %}
+
+{% block contenido %}
+<table class="paper">
+    <tr>
+        <th class="titulo-tabla">Fecha</th>
+        <th class="titulo-tabla">Concepto</th>
+        <th class="titulo-tabla">Tipo</th>
+        <th class="titulo-tabla numero">Cant.</th>
+    </tr>
+    {% if movs %}
+    {% for m in movs %}
+    <tr {% if m.has_errors %} class="error" {% endif %}>
+        <td>
+            {% if m.fecha %}
+            {{ m.fecha }}
+            {% else %}
+            ---
+            {% endif %}
+        </td>
+        <td>{{ m.concepto }}</td>
+        <td>
+            {% if m.tipo == 'I' %}
+            Ingreso
+            {% else %}
+            Gasto
+            {% endif %}
+        </td>
+        <td class="numero">{{ m.cantidad }}</td>
+    </tr>
+    {% if m.has_errors %}
+    <tr>
+        <td></td>
+        <td colspan="3">
+            {% for error in m.errores %}
+            <p class="error">{{ error }}</p>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="4" class="lista-vacia">No hay movimientos disponibles</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock contenido %}
