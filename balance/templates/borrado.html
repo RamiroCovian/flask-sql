@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+{% if resultado %}
+    <p>El movimiento ha sido eliminado correctamente.</p>
+{% else %}
+<p>El movimiento no se ha posido eliminar. Intentalo en otro momento</p>
+{% endif %}
+<p>Pulsa <a href="/">aqui</a> para volver al listado de movimientos.</p>
+{% endblock contenido %}
