@@ -11,6 +11,7 @@
         <th class="titulo-tabla">Concepto</th>
         <th class="titulo-tabla">Tipo</th>
         <th class="titulo-tabla numero">Cant.</th>
+        <th class="titulo-tabla acciones">Acciones</th>
     </tr>
     {% if movs %}
     {% for m in movs %}
@@ -31,6 +32,9 @@
             {% endif %}
         </td>
         <td class="numero">{{ m.cantidad }}</td>
+        <td class="acciones">
+            <a href="/borrar/{{ m.id }}" class="mini-boton">&times;</a>
+        </td>
     </tr>
     {% if m.has_errors %}
     <tr>
