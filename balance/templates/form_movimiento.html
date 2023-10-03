@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<form action="/editar">
+    {{ form.csrt_token }}
+
+    {{ form.id }}
+
+    <div class="campo-formulario">
+        {{ form.fecha.label }}
+        {{ form.fecha }}
+    </div>
+
+    <div class="campo-formulario">
+        {{ form.concepto.label }}
+        {{ form.concepto }}
+    </div>
+
+    <div class="campo-formulario">
+        {% for campo in form.tipo %}
+        {{ campo }}
+        {{ campo.label }}
+        {% endfor %}
+    </div>
+
+    <div class="campo-formulario">
+        {{ form.cantidad.label }}
+        {{ form.cantidad }}
+    </div>
+
+    <div class="acciones">
+        {{ form.submit }}
+    </div>
+
+
+</form>
+{% endblock contenido %}
+
+{% block page_title %}
+<h1>Editar movimiento</h1>
+{% endblock page_title %}
