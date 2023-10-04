@@ -16,4 +16,6 @@ class MovimientoForm(FlaskForm):
     tipo = RadioField(choices=[("I", "Ingreso"), ("G", "Gasto")])
     cantidad = DecimalField("Cantidad", places=2)
 
-    submit = SubmitField("Guardar")
+    submit_guardar = SubmitField("Guardar")
+
+    submit_enviar = SubmitField("Enviar")
