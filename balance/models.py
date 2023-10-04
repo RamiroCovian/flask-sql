@@ -42,6 +42,23 @@ class DBManager:
         # 6. Devolver los resultados
         return self.movimientos
 
+    def insertar(self, fecha, concepto, tipo, cantidad):
+        sql = "INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)"
+        data = (fecha, concepto, tipo, cantidad)
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+
+        resultado = False
+        try:
+            cursor.execute(sql, data)
+            conexion.commit()
+            resultado = True
+        except:
+            conexion.rollback()
+
+        conexion.close()
+        return resultado
+
     def borrar(self, id):
         """
         DELETE FROM movimientos WHERE id=?
@@ -53,6 +70,48 @@ class DBManager:
         resultado = False
         try:
             cursor.execute(sql, (id,))
+            conexion.commit()
+            resultado = True
+        except:
+            conexion.rollback()
+
+        conexion.close()
+        return resultado
+
+    def seleccionar(self, id):
+        """
+        SELECT * FROM movimientos WHERE id=?
+        """
+        sql = "SELECT * FROM movimientos WHERE id=?"
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+
+        resultado = False
+        try:
+            cursor.execute(sql, (id,))
+            conexion.commit()
+            resultado = True
+        except:
+            conexion.rollback
+
+        conexion.close()
+        return resultado
+
+    def modificar(self, fecha, concepto, tipo, cantidad, id):
+        """
+        UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?
+        """
+
+        sql = (
+            "UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?"
+        )
+        data = (fecha, concepto, tipo, cantidad, id)
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+
+        resultado = False
+        try:
+            cursor.execute(sql, data)
             conexion.commit()
             resultado = True
         except:
