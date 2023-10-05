@@ -1,3 +1,4 @@
+from datetime import date
 import sqlite3
 
 
@@ -60,6 +61,7 @@ class DBManager:
             for nombre in nombres_columnas:
                 movimiento[nombre] = datos[indice]
                 indice += 1
+            movimiento["fecha"] = date.fromisoformat(movimiento["fecha"])
             resultado = movimiento
 
         conexion.close()
