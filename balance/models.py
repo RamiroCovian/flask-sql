@@ -91,6 +91,9 @@ class DBManager:
         return resultado
 
     def insertar(self, fecha, concepto, tipo, cantidad):
+        """
+        INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)
+        """
         sql = "INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)"
         data = (fecha, concepto, tipo, cantidad)
         conexion = sqlite3.connect(self.ruta)

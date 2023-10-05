@@ -1,7 +1,23 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
-<form action="/editar/{{ id }}" method="POST">
+
+{% if errors %}
+<!-- <p>Hay errores</p>
+<pre>{{ errors }}</pre> -->
+
+{% for error in errors %}
+<p class="lista-errores">Hay errores en el campo {{ error[0] }}:
+    <ul>
+        {% for msg in error[1] %}
+        <li class="mensaje-error"> {{ msg }}</li>
+        {% endfor %}
+    </ul>
+</p>
+{% endfor %}
+{% endif %}
+
+<form action="/editar/{{ id }}" method="POST" novalidate>
     {{ form.csrf_token }}
 
     {{ form.id }}

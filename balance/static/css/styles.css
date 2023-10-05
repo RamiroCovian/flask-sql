@@ -113,6 +113,7 @@ a.mini-boton:hover {
     text-decoration: none;
 }
 
+/* ESTILOS DEL FORMULARIO */
 
 .campo-formulario label {
     display: block;
@@ -124,5 +125,28 @@ a.mini-boton:hover {
 }
 .campo-formulario > input[type="radio"]~label {
     display: inline-block;
-    margin-right: 16px;
+    margin-right: 30px;
+}
+
+.lista-mensajes {
+    background-color: rgba(255, 0, 0, .3);
+    padding: 16px;
+    color: #600;
+    border-radius: 4px;
+}
+
+.mensaje-errores {
+    color: #600;
+    font-weight: bold;
+}
+
+.exito-flash {
+    font-size: 1rem;
+    background-color: rgba(0, 200, 0, .25);
+    padding: 2rem;
+    color: darkgreen;
+    font-weight: bold;
+    border-radius: 4px;
+    display: flex;
+    gap: 1rem;
 }

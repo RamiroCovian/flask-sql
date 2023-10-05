@@ -1,6 +1,6 @@
 import os
 from datetime import date
-from flask import redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from . import app, RUTA
 from .forms import MovimientoForm
 from .models import DBManager
@@ -15,18 +15,22 @@ def home():
 
 
 @app.route("/nuevo/", methods=["GET", "POST"])
-def agregar(fecha, concepto, tipo, cantidad):
-    db = DBManager(RUTA)
-    ha_ido_bien = db.insertar(fecha, concepto, tipo, cantidad)
-    movimiento = {}
-    formulario = MovimientoForm(data=movimiento)
-    return render_template("nuevo.html", form=formulario, resultado=ha_ido_bien)
+def crear_movimiento():
+    # TODO: reutilizar el formulario para crear movimientos nuevos
+    # Reestructurar el codigo en models.py
+    pass
 
 
 @app.route("/borrar/<int:id>")
 def eliminar(id):
     db = DBManager(RUTA)
     ha_ido_bien = db.borrar(id)
+    # TODO: en lugar de volver a otra pantalla, pintar el mensaje con su propia plantilla
+    # usar un mensaje flash y volver al listado
+    # TODO: un poco mas dficil? pedir confirmacion antes de eliminar un movimiento:
+    #   -Incluir un texto con la pregunta
+    #   -Incluir un boton aceptar que hace la eliminicion y vuelve al listado (con mensaje flash)
+    #   -Incluir un boton cancelar que vuelve al inicio SIN eliminar el movimiento
     return render_template("borrado.html", resultado=ha_ido_bien)
 
 
@@ -63,8 +67,15 @@ def actualizar(id):
             # resultado = db.modificar(fecha, concepto, tipo, cantidad, id)
 
             if resultado:
+                flash("EL movimiento se ha actualizado correctamente", category="Exito")
                 return redirect(url_for("home"))
             return "El movimiento no se ha podido guardar en la base de datos."
         else:
-            return "Los datos no son correctos. (Volver al formulario)"
-    return form.errors
+            # TODO: pintar los mensajes de error junto al campo que lo provoca
+            errores = []
+            for key in form.errors:
+                errores.append((key, form.errors[key]))
+
+            return render_template(
+                "form_movimiento.html", form=form, id=id, errors=errores
+            )
