@@ -10,6 +10,14 @@ class DBManager:
     def __init__(self, ruta):
         self.ruta = ruta
 
+    def conectar(self):
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        return conexion, cursor
+
+    def desconectar(self, conexion):
+        conexion.close()
+
     def consultaSQL(self, consulta):
         # 1. Conectar a la base de datos
         conexion = sqlite3.connect(self.ruta)
@@ -47,8 +55,7 @@ class DBManager:
         consulta = (
             "SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?"
         )
-        conexion = sqlite3.connect(self.ruta)
-        cursor = conexion.cursor()
+        conexion, cursor = self.conectar()
         cursor.execute(consulta, (id,))
         datos = cursor.fetchone()
         resultado = None
@@ -64,7 +71,23 @@ class DBManager:
             movimiento["fecha"] = date.fromisoformat(movimiento["fecha"])
             resultado = movimiento
 
-        conexion.close()
+        self.desconectar(conexion)
+        return resultado
+
+    def consultaConParametros(self, consulta, parametros):
+        conexion, cursor = self.conectar()
+
+        resultado = False
+        try:
+            cursor.execute(consulta, parametros)
+            conexion.commit()
+            resultado = True
+
+        except Exception as ex:
+            print(ex)
+            conexion.rollback()
+
+        self.desconectar(conexion)
         return resultado
 
     def insertar(self, fecha, concepto, tipo, cantidad):
@@ -103,19 +126,7 @@ class DBManager:
         conexion.close()
         return resultado
 
-    def seleccionar(self, id):
-        """
-        SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?
-        """
-        sql = "SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?"
-        conexion = sqlite3.connect(self.ruta)
-        cursor = conexion.cursor()
-        cursor.execute(sql, (id,))
-        conexion.commit()
-        print(id)
-        conexion.close()
-
-    def modificar(self, fecha, concepto, tipo, cantidad, id):
+        # def modificar(self, fecha, concepto, tipo, cantidad, id):
         """
         UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?
         """

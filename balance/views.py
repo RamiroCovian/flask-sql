@@ -1,6 +1,6 @@
 import os
 from datetime import date
-from flask import render_template, request
+from flask import redirect, render_template, request, url_for
 from . import app, RUTA
 from .forms import MovimientoForm
 from .models import DBManager
@@ -30,20 +30,41 @@ def eliminar(id):
     return render_template("borrado.html", resultado=ha_ido_bien)
 
 
-@app.route("/editar/<int:id>")
+@app.route("/editar/<int:id>", methods=["GET", "POST"])
 def actualizar(id):
     if request.method == "GET":
         db = DBManager(RUTA)
         movimiento = db.obtenerMovimiento(id)
-        # TODO: Acceder aqui por un enlace en la lista de movimientos
-        # (Al lado del boton de eliminar)
         formulario = MovimientoForm(data=movimiento)
-        return render_template("form_movimiento.html", form=formulario)
+        return render_template("form_movimiento.html", form=formulario, id=id)
     if request.method == "POST":
-        db = DBManager(RUTA)
-        ha_ido_bien = db.modificar()
-        movimiento = {}
-        formulario = MovimientoForm(data=movimiento)
-        return render_template("agregado.html", resultado=ha_ido_bien)
+        form = MovimientoForm(data=request.form)
+        if form.validate():
+            db = DBManager(RUTA)
+            consulta = "UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?"
+            parametros = (
+                form.fecha.data,
+                form.concepto.data,
+                form.tipo.data,
+                float(form.cantidad.data),
+                form.id.data,
+            )
+            resultado = db.consultaConParametros(consulta, parametros)
 
-    return f"TODO: tratar el metodo POST para actualizar el movimiento {id}"
+            # Otra alternativa
+            # parametros = (
+            #     form.fecha.data,
+            #     form.concepto.data,
+            #     form.tipo.data,
+            #     float(form.cantidad.data),
+            #     form.id.data,
+            # )
+            # (fecha, concepto, tipo, cantidad, id) = parametros
+            # resultado = db.modificar(fecha, concepto, tipo, cantidad, id)
+
+            if resultado:
+                return redirect(url_for("home"))
+            return "El movimiento no se ha podido guardar en la base de datos."
+        else:
+            return "Los datos no son correctos. (Volver al formulario)"
+    return form.errors
