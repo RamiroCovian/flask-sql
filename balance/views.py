@@ -14,6 +14,15 @@ def home():
     return render_template("inicio.html", movs=movimientos)
 
 
+@app.route("/nuevo/", methods=["GET", "POST"])
+def agregar(fecha, concepto, tipo, cantidad):
+    db = DBManager(RUTA)
+    ha_ido_bien = db.insertar(fecha, concepto, tipo, cantidad)
+    movimiento = {}
+    formulario = MovimientoForm(data=movimiento)
+    return render_template("nuevo.html", form=formulario, resultado=ha_ido_bien)
+
+
 @app.route("/borrar/<int:id>")
 def eliminar(id):
     db = DBManager(RUTA)
@@ -24,17 +33,17 @@ def eliminar(id):
 @app.route("/editar/<int:id>")
 def actualizar(id):
     if request.method == "GET":
-        # TODO: Obtener el movimiento que se va a editar por si ID
-        # SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?
+        db = DBManager(RUTA)
+        movimiento = db.obtenerMovimiento(id)
         # TODO: Acceder aqui por un enlace en la lista de movimientos
         # (Al lado del boton de eliminar)
-        movimiento = {
-            "id": 55,
-            "fecha": date.fromisoformat("2023-10-03"),
-            "concepto": "Curso de formularios en Python",
-            "tipo": "G",
-            "cantidad": 55.95,
-        }
         formulario = MovimientoForm(data=movimiento)
         return render_template("form_movimiento.html", form=formulario)
+    if request.method == "POST":
+        db = DBManager(RUTA)
+        ha_ido_bien = db.modificar()
+        movimiento = {}
+        formulario = MovimientoForm(data=movimiento)
+        return render_template("agregado.html", resultado=ha_ido_bien)
+
     return f"TODO: tratar el metodo POST para actualizar el movimiento {id}"
