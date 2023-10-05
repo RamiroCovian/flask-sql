@@ -24,7 +24,7 @@ class DBManager:
         datos = cursor.fetchall()
 
         # 4.2 Los guardo localmente
-        self.movimientos = []
+        self.registros = []
         nombres_columnas = []
         for columna in cursor.description:
             nombres_columnas.append(columna[0])
@@ -34,13 +34,36 @@ class DBManager:
             for nombre in nombres_columnas:
                 movimiento[nombre] = dato[indice]
                 indice += 1
-            self.movimientos.append(movimiento)
+            self.registros.append(movimiento)
 
         # 5. Cerrar la conexion
         conexion.close()
 
         # 6. Devolver los resultados
-        return self.movimientos
+        return self.registros
+
+    def obtenerMovimiento(self, id):
+        consulta = (
+            "SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?"
+        )
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+        cursor.execute(consulta, (id,))
+        datos = cursor.fetchone()
+        resultado = None
+        if datos:
+            nombres_columnas = []
+            for columna in cursor.description:
+                nombres_columnas.append(columna[0])
+            movimiento = {}
+            indice = 0
+            for nombre in nombres_columnas:
+                movimiento[nombre] = datos[indice]
+                indice += 1
+            resultado = movimiento
+
+        conexion.close()
+        return resultado
 
     def insertar(self, fecha, concepto, tipo, cantidad):
         sql = "INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)"
@@ -80,22 +103,15 @@ class DBManager:
 
     def seleccionar(self, id):
         """
-        SELECT * FROM movimientos WHERE id=?
+        SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?
         """
-        sql = "SELECT * FROM movimientos WHERE id=?"
+        sql = "SELECT id, fecha, concepto, tipo, cantidad FROM movimientos WHERE id=?"
         conexion = sqlite3.connect(self.ruta)
         cursor = conexion.cursor()
-
-        resultado = False
-        try:
-            cursor.execute(sql, (id,))
-            conexion.commit()
-            resultado = True
-        except:
-            conexion.rollback
-
+        cursor.execute(sql, (id,))
+        conexion.commit()
+        print(id)
         conexion.close()
-        return resultado
 
     def modificar(self, fecha, concepto, tipo, cantidad, id):
         """
