@@ -33,6 +33,4 @@ class MovimientoForm(FlaskForm):
         ],
     )
 
-    submit_guardar = SubmitField("Guardar")
-
-    submit_enviar = SubmitField("Enviar")
+    submit = SubmitField("Guardar")

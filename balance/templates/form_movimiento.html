@@ -6,15 +6,18 @@
 <!-- <p>Hay errores</p>
 <pre>{{ errors }}</pre> -->
 
-{% for error in errors %}
-<p class="lista-errores">Hay errores en el campo {{ error[0] }}:
+<div class="lista-errores">
+    <i class="fa-solid fa-bomb fa-2xl" style="color: #c92c2c;"></i>
+    Revisa los errores
+    {% for error in errors %}
+    <p>Hay errores en el campo {{ error[0] }}:</p>
     <ul>
         {% for msg in error[1] %}
-        <li class="mensaje-error"> {{ msg }}</li>
+        <li class="mensaje-error">{{ msg }}</li>
         {% endfor %}
     </ul>
-</p>
-{% endfor %}
+    {% endfor %}
+</div>
 {% endif %}
 
 <form action="/editar/{{ id }}" method="POST" novalidate>
@@ -45,7 +48,7 @@
     </div>
 
     <div class="acciones">
-        {{ form.submit_guardar }}
+        {{ form.submit }}
     </div>
 
 

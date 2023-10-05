@@ -102,10 +102,10 @@ a {
 }
 
 .mini-boton {
-    border: solid thin darkgray;
+    /* border: solid thin darkgray; */
     border-radius: 4px;
     padding: 0 3px;
-    background-color: lightgray;
+    /* background-color: lightgray; */
 
 }
 
@@ -121,21 +121,21 @@ a.mini-boton:hover {
     margin-top: 30px;
     margin-bottom: 8px;
     font-size: 1rem;
-
 }
-.campo-formulario > input[type="radio"]~label {
+
+.campo-formulario>input[type="radio"]~label {
     display: inline-block;
     margin-right: 30px;
 }
 
-.lista-mensajes {
+.lista-errores {
     background-color: rgba(255, 0, 0, .3);
     padding: 16px;
     color: #600;
     border-radius: 4px;
 }
 
-.mensaje-errores {
+.mensaje-error {
     color: #600;
     font-weight: bold;
 }
