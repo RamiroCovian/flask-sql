@@ -24,14 +24,20 @@ def crear_movimiento():
 @app.route("/borrar/<int:id>")
 def eliminar(id):
     db = DBManager(RUTA)
-    ha_ido_bien = db.borrar(id)
-    # TODO: en lugar de volver a otra pantalla, pintar el mensaje con su propia plantilla
-    # usar un mensaje flash y volver al listado
+    resultado = db.borrar(id)
+    if resultado:
+        flash("EL movimiento se ha eliminado correctamente", category="Exito")
+        return redirect(url_for("home"))
+    else:
+        flash(
+            "El movimiento no se ha podido eliminar de la base de datos.",
+            category="Error",
+        )
+        return redirect(url_for("home"))
     # TODO: un poco mas dficil? pedir confirmacion antes de eliminar un movimiento:
     #   -Incluir un texto con la pregunta
     #   -Incluir un boton aceptar que hace la eliminicion y vuelve al listado (con mensaje flash)
     #   -Incluir un boton cancelar que vuelve al inicio SIN eliminar el movimiento
-    return render_template("borrado.html", resultado=ha_ido_bien)
 
 
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
