@@ -9,14 +9,6 @@
 <div class="lista-errores">
     <i class="fa-solid fa-bomb fa-2xl" style="color: #c92c2c;"></i>
     Revisa los errores
-    {% for error in errors %}
-    <p>Hay errores en el campo {{ error[0] }}:</p>
-    <ul>
-        {% for msg in error[1] %}
-        <li class="mensaje-error">{{ msg }}</li>
-        {% endfor %}
-    </ul>
-    {% endfor %}
 </div>
 {% endif %}
 
@@ -28,11 +20,41 @@
     <div class="campo-formulario">
         {{ form.fecha.label }}
         {{ form.fecha }}
+        {% if errors %}
+
+            {% for error in errors %}
+
+            {% if error[0] == "fecha" %}
+
+            {% for msg in error[1] %}
+            <li class="mensaje-error-campos">{{ msg }}</li>
+                {% endfor %}
+
+            {% endif %}
+
+            {% endfor %}
+
+        {% endif %}
     </div>
 
     <div class="campo-formulario">
         {{ form.concepto.label }}
         {{ form.concepto }}
+        {% if errors %}
+        
+        {% for error in errors %}
+        
+        {% if error[0] == "concepto" %}
+        
+        {% for msg in error[1] %}
+        <li class="mensaje-error-campos">{{ msg }}</li>
+        {% endfor %}
+        
+        {% endif %}
+        
+        {% endfor %}
+        
+        {% endif %}
     </div>
 
     <div class="campo-formulario">
@@ -40,11 +62,41 @@
         {{ campo }}
         {{ campo.label }}
         {% endfor %}
+        {% if errors %}
+        
+        {% for error in errors %}
+        
+        {% if error[0] == "tipo" %}
+        
+        {% for msg in error[1] %}
+        <li class="mensaje-error-campos">{{ msg }}</li>
+        {% endfor %}
+        
+        {% endif %}
+        
+        {% endfor %}
+        
+        {% endif %}
     </div>
 
     <div class="campo-formulario">
         {{ form.cantidad.label }}
         {{ form.cantidad }}
+        {% if errors %}
+        
+        {% for error in errors %}
+        
+        {% if error[0] == "cantidad" %}
+        
+        {% for msg in error[1] %}
+        <li class="mensaje-error-campos">{{ msg }}</li>
+        {% endfor %}
+        
+        {% endif %}
+        
+        {% endfor %}
+        
+        {% endif %}
     </div>
 
     <div class="acciones">

@@ -77,7 +77,6 @@ def actualizar(id):
                 return redirect(url_for("home"))
             return "El movimiento no se ha podido guardar en la base de datos."
         else:
-            # TODO: pintar los mensajes de error junto al campo que lo provoca
             errores = []
             for key in form.errors:
                 errores.append((key, form.errors[key]))
