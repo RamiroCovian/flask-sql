@@ -25,24 +25,26 @@ def crear_movimiento():
         return render_template("nuevo.html", form=formulario)
     if request.method == "POST":
         form = MovimientoForm(data=request.form)
-        db = DBManager(RUTA)
-        consulta = "INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)"
-        parametros = (
-            form.fecha.data,
-            form.concepto.data,
-            form.tipo.data,
-            float(form.cantidad.data),
-        )
-        resultado = db.crear_movimiento(consulta, parametros)
+        if form.validate():
+            db = DBManager(RUTA)
+            consulta = "INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)"
+            parametros = (
+                form.fecha.data,
+                form.concepto.data,
+                form.tipo.data,
+                float(form.cantidad.data),
+            )
+            resultado = db.crear_movimiento(consulta, parametros)
 
-        if resultado:
-            flash("El movimiento se ha registrado correctamente", category="Exito")
-            return redirect(url_for("home"))
+            if resultado:
+                flash("El movimiento se ha registrado correctamente", category="Exito")
+                return redirect(url_for("home"))
+            return "El movimiento no se ha podido guardar en la base de datos"
         else:
             errores = []
             for key in form.errors:
                 errores.append((key, form.errors[key]))
-                return render_template("nuevo.html", form=form, errors=errores)
+            return render_template("nuevo.html", form=form, errors=errores)
 
 
 @app.route("/borrar/<int:id>")
