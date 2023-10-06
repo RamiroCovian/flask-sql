@@ -6,8 +6,8 @@
 
 
 {% block contenido %}
-<form action="/nuevo/">
-    {{ form.csrt_token }}
+<form action="/nuevo/" method="POST">
+    {{ form.csrf_token }}
 
     {{ form.id }}
 
@@ -34,7 +34,7 @@
     </div>
 
     <div class="acciones">
-        {{ form.submit_enviar }}
+        {{ form.submit }}
     </div>
 
 

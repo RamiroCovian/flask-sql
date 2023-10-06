@@ -18,7 +18,31 @@ def home():
 def crear_movimiento():
     # TODO: reutilizar el formulario para crear movimientos nuevos
     # Reestructurar el codigo en models.py
-    pass
+    if request.method == "GET":
+        db = DBManager(RUTA)
+        movimiento = {}
+        formulario = MovimientoForm(data=movimiento)
+        return render_template("nuevo.html", form=formulario)
+    if request.method == "POST":
+        form = MovimientoForm(data=request.form)
+        db = DBManager(RUTA)
+        consulta = "INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)"
+        parametros = (
+            form.fecha.data,
+            form.concepto.data,
+            form.tipo.data,
+            float(form.cantidad.data),
+        )
+        resultado = db.crear_movimiento(consulta, parametros)
+
+        if resultado:
+            flash("El movimiento se ha registrado correctamente", category="Exito")
+            return redirect(url_for("home"))
+        else:
+            errores = []
+            for key in form.errors:
+                errores.append((key, form.errors[key]))
+                return render_template("nuevo.html", form=form, errors=errores)
 
 
 @app.route("/borrar/<int:id>")

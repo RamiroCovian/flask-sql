@@ -90,6 +90,44 @@ class DBManager:
         self.desconectar(conexion)
         return resultado
 
+    def modificar(self, fecha, concepto, tipo, cantidad, id):
+        """
+        Es otra opcion de actualizar que utiliza consultaConParametros
+        """
+
+        sql = (
+            "UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?"
+        )
+        data = (fecha, concepto, tipo, cantidad, id)
+        conexion = sqlite3.connect(self.ruta)
+        cursor = conexion.cursor()
+
+        resultado = False
+        try:
+            cursor.execute(sql, data)
+            conexion.commit()
+            resultado = True
+        except:
+            conexion.rollback()
+
+        conexion.close()
+        return resultado
+
+    def crear_movimiento(self, consulta, parametros):
+        conexion, cursor = self.conectar()
+
+        resultado = False
+        try:
+            cursor.execute(consulta, parametros)
+            conexion.commit()
+            resultado = True
+        except Exception as ex:
+            print(ex)
+            conexion.rollback()
+
+        self.desconectar(conexion)
+        return resultado
+
     def insertar(self, fecha, concepto, tipo, cantidad):
         """
         INSERT INTO movimientos(fecha, concepto, tipo, cantidad) VALUES(?, ?, ?, ?)
@@ -121,29 +159,6 @@ class DBManager:
         resultado = False
         try:
             cursor.execute(sql, (id,))
-            conexion.commit()
-            resultado = True
-        except:
-            conexion.rollback()
-
-        conexion.close()
-        return resultado
-
-        # def modificar(self, fecha, concepto, tipo, cantidad, id):
-        """
-        UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?
-        """
-
-        sql = (
-            "UPDATE movimientos SET fecha=?, concepto=?, tipo=?, cantidad=? where id=?"
-        )
-        data = (fecha, concepto, tipo, cantidad, id)
-        conexion = sqlite3.connect(self.ruta)
-        cursor = conexion.cursor()
-
-        resultado = False
-        try:
-            cursor.execute(sql, data)
             conexion.commit()
             resultado = True
         except:
